@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What’s Actually Keeping You Stuck in Tennis? — The 2-Minute Quiz</title>
+  <style>
+    :root {
+      --green: #143a2f;
+      --green-2: #1c4a3b;
+      --green-3: #2a5b4b;
+      --cream: #f7f2e8;
+      --white: #ffffff;
+      --gold: #c9a96a;
+      --gold-dark: #ae8c4d;
+      --text: #183128;
+      --muted: #6a766f;
+      --shadow: 0 16px 40px rgba(20, 58, 47, 0.14);
+      --radius: 22px;
+      --transition: 320ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top left, rgba(201,169,106,0.14), transparent 28%),
+        linear-gradient(180deg, #fbf7ef 0%, #f4eee2 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100%;
+    }
+
+    body { padding: 24px; }
+
+    .shell {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: var(--green);
+      letter-spacing: 0.16em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .brand-line {
+      width: 42px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .card {
+      background: rgba(255,255,255,0.74);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(20,58,47,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-accent {
+      height: 6px;
+      background: linear-gradient(90deg, var(--green), var(--gold), var(--green-2));
+    }
+
+    .inner {
+      padding: 28px;
+    }
+
+    .progress-wrap {
+      margin-bottom: 22px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(20,58,47,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      border-radius: 999px;
+      transition: width var(--transition);
+    }
+
+    .screen {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .screen.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      margin: 0 0 12px;
+      line-height: 1.04;
+      color: var(--green);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+    }
+
+    h2 {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+    }
+
+    .subhead {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #415048;
+      max-width: 58ch;
+    }
+
+    .intro-box {
+      margin-top: 24px;
+      padding: 18px 18px 18px 20px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(20,58,47,0.06), rgba(201,169,106,0.12));
+      border: 1px solid rgba(20,58,47,0.08);
+      color: var(--green);
+      font-weight: 500;
+      line-height: 1.65;
+    }
+
+    .question-number {
+      color: var(--gold-dark);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      margin-bottom: 10px;
+    }
+
+    .question-text {
+      font-size: clamp(1.45rem, 3.2vw, 2.15rem);
+      line-height: 1.18;
+      margin: 0 0 22px;
+      color: var(--green);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(20,58,47,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,244,236,0.96));
+      color: var(--text);
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      line-height: 1.45;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      box-shadow: 0 8px 20px rgba(20,58,47,0.05);
+    }
+
+    .answer-btn:hover,
+    .answer-btn:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+      border-color: rgba(201,169,106,0.9);
+      box-shadow: 0 14px 26px rgba(20,58,47,0.1);
+      background: linear-gradient(180deg, #fff, #f8f1e3);
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .result-card {
+      background: linear-gradient(180deg, rgba(20,58,47,0.03), rgba(201,169,106,0.08));
+      border: 1px solid rgba(20,58,47,0.08);
+      border-radius: 20px;
+      padding: 18px;
+      margin: 18px 0 20px;
+    }
+
+    .result-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(20,58,47,0.08);
+      color: var(--green);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .result-copy {
+      font-size: 1.04rem;
+      line-height: 1.8;
+      color: #31423a;
+      margin-bottom: 16px;
+    }
+
+    .action-box {
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(20,58,47,0.08);
+    }
+
+    .action-title {
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .action-text {
+      line-height: 1.65;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 15px 22px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--green), var(--green-2));
+      color: var(--cream);
+      box-shadow: 0 14px 28px rgba(20,58,47,0.18);
+    }
+
+    .btn-secondary {
+      background: rgba(20,58,47,0.06);
+      color: var(--green);
+      border: 1px solid rgba(20,58,47,0.1);
+    }
+
+    .result-tip {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    .fade-wrap {
+      min-height: 380px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 14px; }
+      .inner { padding: 20px; }
+      .question-text { font-size: 1.65rem; }
+      .answer-btn { padding: 15px; font-size: 0.98rem; }
+      .cta-row { flex-direction: column; }
+      .btn { width: 100%; }
+      .fade-wrap { min-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <span class="brand-line"></span>
+      <span>TPA Academy</span>
+      <span class="brand-line"></span>
+    </div>
+
+    <div class="card">
+      <div class="top-accent"></div>
+      <div class="inner">
+        <div id="progressSection" class="progress-wrap hidden">
+          <div class="progress-meta">
+            <span id="progressLabel">Question 1 of 5</span>
+            <span id="progressPercent">20%</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="fade-wrap">
+          <section id="introScreen" class="screen active">
+            <div class="eyebrow">The 2-Minute Quiz</div>
+            <h1>What’s Actually Keeping You Stuck in Tennis?</h1>
+            <p class="subhead">
+              Take this 2-minute quiz to find out what may actually be keeping you stuck at the same level.
+            </p>
+
+            <div class="intro-box">
+              This is a quick, no-pressure self-check for adult women players who want better structure,
+              better coaching, and training that actually fits. At the end, you’ll get one of three personalized
+              results — plus one simple step you can take this week.
+            </div>
+
+            <div class="cta-row" style="margin-top: 28px;">
+              <button class="btn btn-primary" id="startQuizBtn" type="button">Start the Quiz</button>
+            </div>
+
+            <p class="footer-note">
+              No email gate. No forms. Just a quick, useful result you can use right away.
+            </p>
+          </section>
+
+          <div id="questionContainer"></div>
+
+          <section id="resultScreen" class="screen" aria-live="polite">
+            <div class="eyebrow">Your Result</div>
+            <h2 id="resultHeadline"></h2>
+
+            <div class="result-card">
+              <div id="resultLabel" class="result-label"></div>
+              <div id="resultCopy" class="result-copy"></div>
+
+              <div class="action-box">
+                <div class="action-title">One action to take this week</div>
+                <div id="resultAction" class="action-text"></div>
+              </div>
+            </div>
+
+            <div class="cta-row">
+              <a
+                id="ctaButton"
+                class="btn btn-primary"
+                href="https://links.wolfprocommunity.com/widget/form/46SxhC5pMOpQL9ijamNh"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                See My Best Pod Fit
+              </a>
+              <button class="btn btn-secondary" id="retakeBtn" type="button">Retake Quiz</button>
+            </div>
+
+            <p class="result-tip">
+              This result is meant to help you see your current pattern more clearly — not label you.
+              The right training environment can change a lot, quickly.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bookingLink = "https://links.wolfprocommunity.com/widget/form/46SxhC5pMOpQL9ijamNh";
+
+    const questions = [
+      {
+        id: 1,
+        text: "What feels most frustrating right now?",
+        answers: [
+          { text: "I practice, but I stay at the same level.", type: "random" },
+          { text: "I play better in practice than I do in matches.", type: "transfer" },
+          { text: "My clinics feel too random or too generic.", type: "wrongfit" },
+          { text: "I work hard, but my training still doesn’t feel like the right fit.", type: "wrongfit" }
+        ]
+      },
+      {
+        id: 2,
+        text: "What best describes your current training?",
+        answers: [
+          { text: "Mostly clinics.", type: "wrongfit" },
+          { text: "Clinics plus some match play.", type: "transfer" },
+          { text: "A mix of group work, but not much structure from week to week.", type: "random" },
+          { text: "I’m inconsistent and don’t really have a clear plan.", type: "random" }
+        ]
+      },
+      {
+        id: 3,
+        text: "Where does improvement seem to break down most?",
+        answers: [
+          { text: "I get reps, but I’m not seeing real progress.", type: "random" },
+          { text: "I can do it in drills, but it disappears in points.", type: "transfer" },
+          { text: "I’m not getting enough feedback or correction.", type: "wrongfit" },
+          { text: "I’m not sure what I should be working on from week to week.", type: "random" }
+        ]
+      },
+      {
+        id: 4,
+        text: "How well matched does your current training feel to your level and goals?",
+        answers: [
+          { text: "Very matched.", type: "transfer" },
+          { text: "Somewhat matched, but something still feels off.", type: "random" },
+          { text: "Not really matched.", type: "wrongfit" },
+          { text: "Honestly, I don’t think it fits me that well.", type: "wrongfit" }
+        ]
+      },
+      {
+        id: 5,
+        text: "What do you want most right now?",
+        answers: [
+          { text: "More structure and a clearer progression plan.", type: "random" },
+          { text: "To see my practice actually show up in matches.", type: "transfer" },
+          { text: "A better-fitting group and more coaching attention.", type: "wrongfit" },
+          { text: "To feel like my training finally makes sense for where I am.", type: "wrongfit" }
+        ]
+      }
+    ];
+
+    const results = {
+      random: {
+        label: "The Random-Trainer",
+        headline: "You don’t need more effort — you need more structure.",
+        copy:
+          "You’re likely putting in reps, but not enough of those reps are connected to a clear progression. That can leave you feeling busy, committed, and still somehow stuck. This usually isn’t about a lack of desire — it’s about training that feels too scattered to create real momentum. When your coaching, feedback, and weekly focus become more intentional, improvement starts to feel a lot less random.",
+        action:
+          "Before your next session, choose just one thing you want to improve and judge the session by whether that one thing got clearer — not by how tired you felt afterward."
+      },
+      transfer: {
+        label: "The Match-Transfer Gap",
+        headline: "Your practice level may be ahead of your match level.",
+        copy:
+          "A lot of adult players look solid in drills but feel frustrated when the same level doesn’t show up in real points. That usually means the issue isn’t just technique — it’s how your training is transferring into decisions, pressure, and match patterns. You may not need more volume as much as better bridge work between practice and competition. The good news is this is a very fixable pattern when training becomes more game-aware.",
+        action:
+          "In your next practice set, give yourself one match goal only — for example, commit to one serve pattern or one rally intention — and keep the focus there the whole time."
+      },
+      wrongfit: {
+        label: "The Wrong-Fit Player",
+        headline: "You may be training in an environment that isn’t really built for you.",
+        copy:
+          "Sometimes the issue isn’t how hard you’re working — it’s the fit of the room you’re training in. If your clinics or groups are too broad, too random, or not closely matched to your level, it becomes much harder to build confidence and improvement at the same time. You can still get a workout without getting what your game actually needs. The right-fit group usually feels more focused, more personalized, and much more motivating.",
+        action:
+          "Ask yourself after your next clinic or group session: did this feel matched to my level and goals — or did I mostly just blend into the group?"
+      }
+    };
+
+    const introScreen = document.getElementById("introScreen");
+    const questionContainer = document.getElementById("questionContainer");
+    const resultScreen = document.getElementById("resultScreen");
+    const startQuizBtn = document.getElementById("startQuizBtn");
+    const retakeBtn = document.getElementById("retakeBtn");
+    const progressSection = document.getElementById("progressSection");
+    const progressFill = document.getElementById("progressFill");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressPercent = document.getElementById("progressPercent");
+    const resultHeadline = document.getElementById("resultHeadline");
+    const resultLabel = document.getElementById("resultLabel");
+    const resultCopy = document.getElementById("resultCopy");
+    const resultAction = document.getElementById("resultAction");
+    const ctaButton = document.getElementById("ctaButton");
+
+    let currentQuestionIndex = 0;
+    let scores = { random: 0, transfer: 0, wrongfit: 0 };
+
+    ctaButton.href = bookingLink;
+
+    function createQuestionScreens() {
+      questionContainer.innerHTML = "";
+
+      questions.forEach((question, index) => {
+        const section = document.createElement("section");
+        section.className = "screen";
+        section.id = `question-${question.id}`;
+
+        const answersHtml = question.answers.map(answer => `
+          <button class="answer-btn" type="button" data-type="${answer.type}">
+            ${answer.text}
+          </button>
+        `).join("");
+
+        section.innerHTML = `
+          <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+          <h2 class="question-text">${question.text}</h2>
+          <div class="answers">${answersHtml}</div>
+          <p class="footer-note">Choose the answer that feels most true right now.</p>
+        `;
+
+        questionContainer.appendChild(section);
+      });
+
+      questionContainer.querySelectorAll(".answer-btn").forEach((btn) => {
+        btn.addEventListener("click", handleAnswer);
+      });
+    }
+
+    function hideAllScreens() {
+      document.querySelectorAll(".screen").forEach((screen) => {
+        screen.classList.remove("active");
+      });
+    }
+
+    function showScreen(el) {
+      hideAllScreens();
+      el.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateProgress() {
+      const total = questions.length;
+      const current = currentQuestionIndex + 1;
+
+      progressLabel.textContent =
+        currentQuestionIndex < total
+          ? `Question ${current} of ${total}`
+          : "Your result";
+
+      progressPercent.textContent =
+        currentQuestionIndex < total
+          ? `${Math.round((current / total) * 100)}%`
+          : "100%";
+
+      progressFill.style.width =
+        currentQuestionIndex < total
+          ? `${(current / total) * 100}%`
+          : "100%";
+    }
+
+    function startQuiz() {
+      currentQuestionIndex = 0;
+      scores = { random: 0, transfer: 0, wrongfit: 0 };
+      progressSection.classList.remove("hidden");
+      updateProgress();
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (currentQuestionIndex >= questions.length) {
+        showResult();
+        return;
+      }
+
+      updateProgress();
+      const screen = document.getElementById(`question-${questions[currentQuestionIndex].id}`);
+      showScreen(screen);
+    }
+
+    function handleAnswer(event) {
+      const selectedType = event.currentTarget.dataset.type;
+      scores[selectedType] += 1;
+      currentQuestionIndex += 1;
+      showQuestion();
+    }
+
+    function getTopResult() {
+      const entries = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+
+      if (entries[0][1] === entries[1][1]) {
+        const priority = ["random", "transfer", "wrongfit"];
+        const tied = entries.filter((entry) => entry[1] === entries[0][1]).map((entry) => entry[0]);
+        return priority.find((type) => tied.includes(type)) || entries[0][0];
+      }
+
+      return entries[0][0];
+    }
+
+    function showResult() {
+      const type = getTopResult();
+      const result = results[type];
+
+      progressLabel.textContent = "Your result";
+      progressPercent.textContent = "100%";
+      progressFill.style.width = "100%";
+
+      resultHeadline.textContent = result.headline;
+      resultLabel.textContent = result.label;
+      resultCopy.textContent = result.copy;
+      resultAction.textContent = result.action;
+
+      showScreen(resultScreen);
+    }
+
+    function resetQuiz() {
+      progressSection.classList.add("hidden");
+      progressFill.style.width = "0%";
+      currentQuestionIndex = 0;
+      scores = { random: 0, transfer: 0, wrongfit: 0 };
+      showScreen(introScreen);
+    }
+
+    startQuizBtn.addEventListener("click", startQuiz);
+    retakeBtn.addEventListener("click", resetQuiz);
+
+    createQuestionScreens();
+  </script>
+</body>
+</html>
